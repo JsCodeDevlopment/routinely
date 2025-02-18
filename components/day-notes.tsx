@@ -23,7 +23,7 @@ export function DayNotes({ date, onNotesChange }: { date: Date; onNotesChange?: 
 
   useEffect(() => {
     fetchNotes()
-  }, []) // Removed unnecessary dependency 'date'
+  }, [date])
 
   const fetchNotes = async () => {
     try {
@@ -34,7 +34,6 @@ export function DayNotes({ date, onNotesChange }: { date: Date; onNotesChange?: 
       }
       const data = await response.json()
       setNotes(data)
-      if (onNotesChange) onNotesChange()
     } catch (error) {
       console.error("Failed to fetch notes:", error)
       toast({
