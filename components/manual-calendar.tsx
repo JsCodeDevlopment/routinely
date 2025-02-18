@@ -7,10 +7,8 @@ import { Badge } from "@/components/ui/badge";
 
 type CalendarProps = {
   onSelectDate: (date: Date) => void;
-  noteDates: string[];
+  noteDates: { date: string; count: number }[];
 };
-
-//TODO: não importa qual dia da semana eu clique, sempre é exibido todas as notas já criadas, quando deveria ser exibido apenas as notas daquele dia
 
 export function ManualCalendar({ onSelectDate, noteDates }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -49,17 +47,6 @@ export function ManualCalendar({ onSelectDate, noteDates }: CalendarProps) {
     onSelectDate(clickedDate);
   };
 
-  const hasNotes = (day: number) => {
-    const dateString = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      day
-    )
-      .toISOString()
-      .split("T")[0];
-    return noteDates.includes(dateString);
-  };
-
   const getNotesCount = (day: number) => {
     const dateString = new Date(
       currentDate.getFullYear(),
@@ -68,7 +55,8 @@ export function ManualCalendar({ onSelectDate, noteDates }: CalendarProps) {
     )
       .toISOString()
       .split("T")[0];
-    return noteDates[dateString] || 0;
+    const noteDate = noteDates.find((note) => note.date === dateString);
+    return noteDate ? noteDate.count : 0;
   };
 
   return (
@@ -77,17 +65,19 @@ export function ManualCalendar({ onSelectDate, noteDates }: CalendarProps) {
         <Button onClick={prevMonth} variant="outline" size="icon">
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <h2 className="text-lg font-semibold">
-          {currentDate.toLocaleString("default", {
-            month: "long",
-            year: "numeric",
-          })}
+        <h2 className="text-2xl font-bold">
+          {currentDate
+            .toLocaleString("default", {
+              month: "long",
+              year: "numeric",
+            })
+            .toUpperCase()}
         </h2>
         <Button onClick={nextMonth} variant="outline" size="icon">
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-5">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
           <div key={day} className="text-center font-medium text-lg py-1">
             {day}
@@ -102,8 +92,6 @@ export function ManualCalendar({ onSelectDate, noteDates }: CalendarProps) {
             selectedDate?.getDate() === day &&
             selectedDate?.getMonth() === currentDate.getMonth() &&
             selectedDate?.getFullYear() === currentDate.getFullYear();
-          const hasNotesForDay = hasNotes(day);
-
           const notesCount = getNotesCount(day);
           return (
             <Button
@@ -111,27 +99,15 @@ export function ManualCalendar({ onSelectDate, noteDates }: CalendarProps) {
               size="lg"
               onClick={() => handleDateClick(day)}
               variant={isSelected ? "default" : "ghost"}
-              className={`relative py-10 ${hasNotesForDay ? "font-bold" : ""}`}
+              className={`relative p-10 ${notesCount > 0 ? "font-bold" : ""}`}
             >
               {day}
-              {hasNotesForDay && (
+              {notesCount > 0 && (
                 <Badge
                   variant="destructive"
-                  className="absolute top-1 right-1 text-white text-xs px-2 py-1 rounded-full"
+                  className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0"
                 >
-                  {
-                    noteDates.filter(
-                      (date) =>
-                        new Date(date).toISOString().split("T")[0] ===
-                        new Date(
-                          currentDate.getFullYear(),
-                          currentDate.getMonth(),
-                          day
-                        )
-                          .toISOString()
-                          .split("T")[0]
-                    ).length
-                  }
+                  {notesCount}
                 </Badge>
               )}
             </Button>

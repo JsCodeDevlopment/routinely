@@ -6,9 +6,14 @@ import { ManualCalendar } from "@/components/manual-calendar"
 import { DayNotes } from "@/components/day-notes"
 import { useToast } from "@/components/ui/use-toast"
 
+type NoteDate = {
+  date: string
+  count: number
+}
+
 export default function CalendarContent() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [noteDates, setNoteDates] = useState<string[]>([])
+  const [noteDates, setNoteDates] = useState<NoteDate[]>([])
   const { toast } = useToast()
 
   useEffect(() => {
@@ -19,7 +24,7 @@ export default function CalendarContent() {
     try {
       const response = await fetch("/api/notes/dates")
       if (response.ok) {
-        const data = await response.json()
+        const data: NoteDate[] = await response.json()
         setNoteDates(data)
       } else {
         throw new Error("Failed to fetch note dates")
