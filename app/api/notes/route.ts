@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]/route"
 import prisma from "@/lib/prisma"
+import { NoteStatusEnum } from "@/components/day-notes"
 
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions)
@@ -10,34 +11,35 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url)
-  const date = searchParams.get("date")
-  const start = searchParams.get("start")
-  const end = searchParams.get("end")
+  const dateParam = searchParams.get("date")
 
-  let notes
-
-  if (date) {
-    notes = await prisma.note.findMany({
-      where: {
-        date: new Date(date),
-        userId: session.user.id,
-      },
-    })
-  } else if (start && end) {
-    notes = await prisma.note.findMany({
-      where: {
-        date: {
-          gte: new Date(start),
-          lte: new Date(end),
-        },
-        userId: session.user.id,
-      },
-    })
-  } else {
-    return NextResponse.json({ error: "Invalid parameters" }, { status: 400 })
+  if (!dateParam) {
+    return NextResponse.json({ error: "Date parameter is required" }, { status: 400 })
   }
 
-  return NextResponse.json(notes)
+  const date = new Date(dateParam)
+  const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+  const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
+
+  try {
+    const notes = await prisma.note.findMany({
+      where: {
+        userId: session.user.id,
+        date: {
+          gte: startOfDay,
+          lt: endOfDay,
+        },
+      },
+      orderBy: {
+        time: "asc",
+      },
+    })
+
+    return NextResponse.json(notes)
+  } catch (error) {
+    console.error("Error fetching notes:", error)
+    return NextResponse.json({ error: "Failed to fetch notes" }, { status: 500 })
+  }
 }
 
 export async function POST(request: Request) {
@@ -47,17 +49,23 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json()
-  const { date, time, content } = body
+  const { date, time, content, status } = body
 
-  const note = await prisma.note.create({
-    data: {
-      date: new Date(date),
-      time,
-      content,
-      userId: session.user.id,
-    },
-  })
+  try {
+    const note = await prisma.note.create({
+      data: {
+        date: new Date(date),
+        time,
+        content,
+        status: status || NoteStatusEnum.pending,
+        userId: session.user.id,
+      },
+    })
 
-  return NextResponse.json(note)
+    return NextResponse.json(note)
+  } catch (error) {
+    console.error("Error creating note:", error)
+    return NextResponse.json({ error: "Failed to create note" }, { status: 500 })
+  }
 }
 
