@@ -8,24 +8,19 @@ generator client {
 }
 
 model User {
-  id       String  @id @default(cuid())
-  name     String?
-  email    String  @unique
-  password String
-  notes    Note[]
-}
-
-enum NoteStatus {
-  pending
-  completed
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String
+  notes     Note[]
 }
 
 model Note {
-  id      String     @id @default(cuid())
-  date    DateTime
-  time    String
-  content String
-  status  NoteStatus @default(pending)
-  user    User       @relation(fields: [userId], references: [id])
-  userId  String
+  id        String   @id @default(cuid())
+  date      DateTime
+  time      String
+  content   String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
 }
+
