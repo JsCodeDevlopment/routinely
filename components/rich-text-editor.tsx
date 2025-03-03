@@ -34,9 +34,6 @@ const formats = [
   "list",
   "bullet",
   "link",
-  "script",
-  "blockquote",
-  "code-block",
 ];
 
 export function RichTextEditor({
