@@ -44,7 +44,7 @@ export default function CalendarContent() {
   }
 
   return (
-    <div className="flex h-full p-6">
+    <div className="flex h-full p-6 mb-5">
       <div className="w-1/2 pr-3">
         <Card className="h-full">
           <CardContent className="p-4 h-full flex items-center justify-center">
@@ -53,8 +53,8 @@ export default function CalendarContent() {
         </Card>
       </div>
       <div className="w-1/2 pl-3">
-        <Card className="h-full">
-          <CardContent className="p-4 h-full">
+        <Card>
+          <CardContent className="p-4">
             {selectedDate ? (
               <DayNotes date={selectedDate} onNotesChange={handleNotesChange} />
             ) : (
