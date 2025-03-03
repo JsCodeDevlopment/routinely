@@ -5,13 +5,13 @@ import AuthenticatedLayout from "@/components/authenticated-layout"
 import type React from "react"
 
 import "./globals.css"
+import "react-quill/dist/quill.snow.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
   title: "Calendar System",
   description: "A dynamic calendar system for managing your schedule",
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -31,6 +31,3 @@ export default function RootLayout({
   )
 }
 
-
-
-import './globals.css'
