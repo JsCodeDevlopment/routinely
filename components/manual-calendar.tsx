@@ -65,12 +65,9 @@ export function ManualCalendar({ onSelectDate, noteDates }: CalendarProps) {
         <Button onClick={prevMonth} variant="outline" size="icon">
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <h2 className="text-2xl font-bold">
+        <h2 className="text-2xl font-semibold">
           {currentDate
-            .toLocaleString("default", {
-              month: "long",
-              year: "numeric",
-            })
+            .toLocaleString("default", { month: "long", year: "numeric" })
             .toUpperCase()}
         </h2>
         <Button onClick={nextMonth} variant="outline" size="icon">
@@ -99,7 +96,13 @@ export function ManualCalendar({ onSelectDate, noteDates }: CalendarProps) {
               size="lg"
               onClick={() => handleDateClick(day)}
               variant={isSelected ? "default" : "ghost"}
-              className={`relative p-10 ${notesCount > 0 ? "font-bold" : ""}`}
+              className={`relative ${notesCount > 0 ? "font-bold" : ""} ${
+                currentDate.getDate() === day &&
+                currentDate.getMonth() === new Date().getMonth() &&
+                currentDate.getFullYear() === new Date().getFullYear()
+                  ? "border border-black hover:border-black/10"
+                  : ""
+              }`}
             >
               {day}
               {notesCount > 0 && (

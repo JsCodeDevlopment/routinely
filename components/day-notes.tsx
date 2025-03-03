@@ -144,7 +144,7 @@ export function DayNotes({ date, onNotesChange }: { date: Date; onNotesChange?: 
       const response = await fetch(`/api/notes/${note.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...note, status: newStatus }),
+        body: JSON.stringify({ status: newStatus }),
       })
       if (response.status === 401) {
         router.push("/login")
@@ -261,4 +261,3 @@ export function DayNotes({ date, onNotesChange }: { date: Date; onNotesChange?: 
     </div>
   )
 }
-
