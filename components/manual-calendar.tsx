@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,11 +8,26 @@ import { Badge } from "@/components/ui/badge";
 type CalendarProps = {
   onSelectDate: (date: Date) => void;
   noteDates: { date: string; count: number }[];
+  initialDate?: Date;
 };
 
-export function ManualCalendar({ onSelectDate, noteDates }: CalendarProps) {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+export function ManualCalendar({
+  onSelectDate,
+  noteDates,
+  initialDate,
+}: CalendarProps) {
+  const [currentDate, setCurrentDate] = useState(initialDate || new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(
+    initialDate || null
+  );
+
+  useEffect(() => {
+    if (initialDate) {
+      setCurrentDate(initialDate);
+      setSelectedDate(initialDate);
+      onSelectDate(initialDate);
+    }
+  }, [initialDate, onSelectDate]);
 
   const daysInMonth = new Date(
     currentDate.getFullYear(),
