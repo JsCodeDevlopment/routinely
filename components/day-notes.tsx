@@ -235,10 +235,10 @@ export function DayNotes({
           .map((note) => (
             <div
               key={note.id}
-              className="flex items-center space-x-2 bg-gray-100 p-2 rounded"
+              className="flex w-full items-center space-x-2 bg-gray-100 p-2 rounded"
             >
               {editingNote?.id === note.id ? (
-                <div className="flex flex-col gap-3">
+                <div className="flex w-full flex-col gap-3">
                   <Select
                     value={editingNote.time}
                     onValueChange={(value) =>
