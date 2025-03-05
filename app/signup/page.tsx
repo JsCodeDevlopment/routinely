@@ -7,7 +7,7 @@ export default async function SignupPage() {
   const session = await getServerSession(authOptions)
 
   if (session) {
-    redirect("/calendar")
+    redirect("/dashboard")
   }
 
   return <SignupForm />
