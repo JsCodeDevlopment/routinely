@@ -9,10 +9,23 @@ import "react-quill/dist/quill.snow.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "Calendar System",
-  description: "A dynamic calendar system for managing your schedule",
-};
+export async function generateMetadata() {
+  return {
+    title: "Routinely",
+    description: "A dynamic calendar system for managing your schedule.",
+    keywords: ["calendar", "notes", "daily", "system", "schedule", "dynamic"],
+    openGraph: {
+      title: "Routinely",
+      description: "A dynamic calendar system for managing your schedule",
+      images: [
+        {
+          url: "https://routinely-calendar.vercel.app/logo.png",
+          alt: "Routinely Logotype",
+        },
+      ],
+    },
+  };
+}
 
 export default function RootLayout({
   children,
