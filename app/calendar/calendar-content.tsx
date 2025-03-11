@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { ManualCalendar } from "@/components/manual-calendar";
 import { DayNotes } from "@/components/day-notes";
+import { ManualCalendar } from "@/components/manual-calendar";
+import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { useEffect, useState } from "react";
 
 type NoteDate = {
   date: string;
@@ -50,8 +50,8 @@ export default function CalendarContent({
   };
 
   return (
-    <div className="flex h-full p-6 mb-5">
-      <div className="w-1/2 pr-3">
+    <div className="flex h-full gap-3 p-6 mb-5 max-[1193px]:flex-col">
+      <div className="w-1/2 max-[1193px]:pr-0 max-[1193px]:w-full pr-3">
         <Card className="h-full">
           <CardContent className="p-4 h-full flex items-center justify-center">
             <ManualCalendar
@@ -61,7 +61,7 @@ export default function CalendarContent({
           </CardContent>
         </Card>
       </div>
-      <div className="w-1/2 pl-3">
+      <div className="w-1/2 max-[1193px]:pl-0 max-[1193px]:w-full pl-3">
         <Card>
           <CardContent className="p-4">
             {selectedDate ? (
